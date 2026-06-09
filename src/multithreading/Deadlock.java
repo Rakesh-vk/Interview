@@ -1,40 +1,73 @@
 package multithreading;
 
-import java.util.concurrent.locks.Lock;
-
 public class Deadlock {
+    private static final Object resourceA = new Object();
+    private static final Object resourceB = new Object();
+
     public static void main(String[] args) {
-        final String resource1 = "Resource 1";
-        final String resource2 = "Resource 2";
 
-
-        // Thread 1 tries to lock resource1 then resource2
         Thread t1 = new Thread(() -> {
-            synchronized (resource1) {
-                System.out.println("Thread 1: Locked Resource 1");
 
-                 try { Thread.sleep(100); } catch (Exception e) {}
+            synchronized (resourceA) {
 
-                System.out.println("Thread 1: Waiting for Resource 2...");
-                synchronized (resource2) {
-                    System.out.println("Thread 1: Locked Resource 2");
+                System.out.println(
+                        Thread.currentThread().getName()
+                                + " locked Resource-A"
+                );
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(
+                        Thread.currentThread().getName()
+                                + " waiting for Resource-B"
+                );
+
+                synchronized (resourceB) {
+
+                    System.out.println(
+                            Thread.currentThread().getName()
+                                    + " locked Resource-B"
+                    );
                 }
             }
         });
 
-        // Thread 2 tries to lock resource2 then resource1
         Thread t2 = new Thread(() -> {
-            synchronized (resource2) {
-                System.out.println("Thread 2: Locked Resource 2");
 
-                try { Thread.sleep(100); } catch (Exception e) {}
+            synchronized (resourceB) {
 
-                System.out.println("Thread 2: Waiting for Resource 1...");
-                synchronized (resource1) {
-                    System.out.println("Thread 2: Locked Resource 1");
+                System.out.println(
+                        Thread.currentThread().getName()
+                                + " locked Resource-B"
+                );
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(
+                        Thread.currentThread().getName()
+                                + " waiting for Resource-A"
+                );
+
+                synchronized (resourceA) {
+
+                    System.out.println(
+                            Thread.currentThread().getName()
+                                    + " locked Resource-A"
+                    );
                 }
             }
         });
+
+        t1.setName("Thread-1");
+        t2.setName("Thread-2");
 
         t1.start();
         t2.start();

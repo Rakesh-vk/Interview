@@ -1,0 +1,186 @@
+package collections.List;
+
+import java.util.Stack;
+
+class LinkedList{
+    Node head;
+    static class Node{
+        int data;
+        Node next;
+        Node(int data){
+            this.data=data;
+            this.next=null;
+        }
+    }
+    public static LinkedList insert(LinkedList list,int data){
+        // create a new node with data
+        Node newNode= new Node(data);
+        // to insert we must first check if the list is empty
+        if(list.head==null){
+            list.head=newNode;
+        }
+        // if list contains nodes travers to end of the list, make next pointer point to new node
+        else{
+            Node last= list.head;
+            while(last.next!=null){
+                last=last.next;
+            }
+            last.next=newNode;
+        }
+        return list;
+    }
+    public static void printList(LinkedList list){
+        Node itr=list.head;
+        while(itr!=null) {
+            System.out.print(itr.data+" -> ");
+            itr = itr.next;
+        }
+        System.out.print("null \n");
+    }
+    public static void deleteByKey(LinkedList list, int key){
+
+        Node next = list.head;
+        Node prev = null;
+        if(next!=null && next.data==key){
+            list.head=next.next;
+            return ;
+        }
+        while(next!=null && next.data!=key){
+            prev = next;
+            next= next.next;
+        }
+        if(next!=null){
+            prev.next=next.next;
+        }
+    }
+    public static void deleteFirstNode(LinkedList list){
+        list.head=list.head.next;
+    }
+    public static void deleteLastNode(LinkedList list){
+        Node curNode=list.head,prev=null;
+        // traverse to end
+        while(curNode.next!=null){
+            prev=curNode;
+            curNode=curNode.next;
+        }
+        prev.next=null;
+
+
+    }
+    public static void insertAfterKey(LinkedList list,int key,int data){
+        // case 1 element/key is present
+        // element/ key is present at start
+        Node curNode= list.head;
+        Node newNode= new Node(data);
+        if(curNode != null && curNode.data==key){
+            newNode.next=curNode.next;
+            curNode.next=newNode;
+            return ;
+        }
+        // element/key is present at middle
+        // traverse to node
+        while(curNode!=null && curNode.data!=key){
+            curNode=curNode.next;
+        }
+        if(curNode!=null){
+            newNode.next=curNode.next;
+            curNode.next=newNode;
+        }
+        else{
+            curNode.next=newNode;
+        }
+        // element/ key is present at end
+        // case 2 element/key is not present
+    }
+    public static void reverseLinkedListUsingStack(LinkedList list){
+        // here I am using stack to store the data in stack as stack works on LIFO
+        // first iteration will add the elements to stack
+        // second iteration will add the element to linkedlist in reverse order
+        // time complexity O(n) = O(n) first iteration + O(n) second iteration.
+        // space complexity O(n) as we are adding n elements to stack.
+        // not efficient way as the stack will take n memory
+        Stack<Integer> st= new Stack<>();
+        Node temp = list.head;
+        while(temp!=null){
+            st.add(temp.data);
+            temp=temp.next;
+        }
+        temp = list.head;
+        while(temp!=null){
+            temp.data=st.pop();
+            temp=temp.next;
+        }
+        printList(list);
+    }
+    public static void reverseLinkedListUsingTwoPointers(LinkedList list) {
+        // using the two pointers one is curNode another is prevNode
+        // loop till temp reaches null i.e while(temp!=null)
+        // save curNode.next in a variable i.e Node nextNode = curNode.next
+        // point curNode.next = prev
+        // prev = curNode
+        // curNode = next
+        // time complexity O(n) as we need to iterate through the linked list with n elements
+        // space complexity O(1) as we are not using any extra space
+        Node prev = list.head;
+        Node curr = list.head;
+        if(curr.next == null) return;
+        curr=curr.next;
+        while(curr!= null){
+            Node temp = curr.next;
+            curr.next=prev;
+            prev=curr;
+            curr=temp;
+        }
+        list.head.next=null;
+        list.head=prev;
+        printList(list);
+     }
+     public static void reverseLinkedListUsingRecursion(LinkedList list){
+        //recursion is checking what we are doing repeatedly and finding the base case
+         // and working in backword order
+         // time complexity O(n)
+         // space complexity O(n)
+        Node head= list.head;
+        list.head=reverse(head);
+        printList(list);
+
+     }
+     public static Node reverse(Node head){
+        if(head==null || head.next==null){
+            return head;
+        }
+        Node newHead = reverse(head.next);
+        Node front =head.next;
+        front.next= head;
+        head.next=null;
+        return newHead;
+     }
+
+}
+public class LinkedLists {
+    public static void main(String[] args) {
+        LinkedList list= new LinkedList();
+        list = LinkedList.insert(list,10);
+        list = LinkedList.insert(list,20);
+        list = LinkedList.insert(list,30);
+        list = LinkedList.insert(list,40);
+        list = LinkedList.insert(list,50);
+        LinkedList.printList(list);
+        LinkedList.reverseLinkedListUsingRecursion(list);
+
+//        LinkedList.reverseLinkedListUsingTwoPointers(list);
+//        LinkedList.printList(list);
+//        LinkedList.reverseLinkedListUsingStack(list);
+//        LinkedList.printList(list);
+////        LinkedList.deleteByKey(list,10);
+////        LinkedList.printList(list);
+//        LinkedList.insertAfterKey(list,50,12);
+//        LinkedList.printList(list);
+////        LinkedList.deleteFirstNode(list);
+//        LinkedList.deleteLastNode(list);
+//        LinkedList.printList(list);
+        String st="abc";
+
+
+    }
+}

@@ -1,0 +1,117 @@
+Why local variables must be effectively final?
+Because:
+lambda may execute later
+local variable may already be destroyed from stack
+captured copy avoids unsafe mutation
+
+Stream API is a feature introduced in Java 8 for processing collections of data in a:
+declarative
+functional
+pipeline-based manner
+A Stream is:
+a sequence of elements supporting aggregate operations.
+Important:
+Stream does NOT store data.
+It processes data from sources like:
+Collection
+Arrays
+Files
+Infinite generators
+
+Internal Working
+Most developers know syntax.
+Very few understand how streams actually execute.
+Interviewers at good companies care about:
+lazy evaluation
+pipeline execution
+internal iteration
+stateless/stateful operations
+parallel execution
+
+Intermediate Operations
+Return another stream.
+Examples:
+filter
+map
+sorted
+distinct
+limit
+skip
+These are lazy.
+
+
+Terminal Operations
+Trigger execution.
+Examples:
+collect
+forEach
+count
+reduce
+findFirst
+After terminal operation:
+stream is consumed
+Cannot reuse.
+
+Stateless vs Stateful Operations
+Stateless
+Do not depend on previous elements.
+Examples:
+map
+filter
+Efficient for parallelism.
+Stateful
+Need previous data/history.
+Examples:
+sorted
+distinct
+Require buffering.
+Higher memory cost.
+
+parallel streams
+
+Parallel Stream is a feature in Java Streams API that allows stream operations to execute concurrently using multiple threads, typically leveraging the ForkJoinPool common pool.
+Instead of processing elements one by one sequentially, the data gets divided into chunks and processed in parallel across CPU cores.
+
+Parallel streams should NOT be used when:
+parallelization overhead exceeds benefit
+tasks are blocking or stateful
+thread safety is difficult
+workload is not CPU-bound
+ordering or coordination becomes expensive
+Parallel streams are not a universal optimization tool.
+
+scenarios
+1. when the data set is small. computation cost >> parallelization overhead
+2. database calls.
+3. RestAPI calls
+    HTTP calls:
+    network latency
+    thread blocking
+    retry logic
+    timeout handling
+    Parallel stream gives:
+    uncontrolled concurrency
+    thread pool starvation
+4. shared mutable state
+5. Order-Sensitive Operations
+6. stateFul operations
+7. infinite streams
+    Can create:
+    uncontrolled task generation
+    memory pressure
+    unpredictable execution
+
+| Situation                  | Why Parallel Stream is Bad |
+| -------------------------- | -------------------------- |
+| Small datasets             | Overhead dominates         |
+| DB calls                   | Blocking IO                |
+| REST calls                 | Thread starvation          |
+| Shared mutable state       | Race conditions            |
+| Order-sensitive processing | Synchronization cost       |
+| Stateful operations        | Coordination overhead      |
+| LinkedList                 | Poor splitting             |
+| Nested parallel streams    | Oversubscription           |
+| Tiny computations          | No real gain               |
+| High CPU usage already     | More contention            |
+
+

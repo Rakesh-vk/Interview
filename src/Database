@@ -1,0 +1,97 @@
+
+This is a query performance degradation problem — the query works fine at small scale but degrades as data grows. This is almost always caused by one or more of:
+Full table scan → Missing indexes → N+1 queries → Bad query structure → No pagination → ORM misuse
+The approach is: Measure first, assume nothing, fix what data tells you.
+
+Diagnosis first
+ step 1 - Get the actual query
+          Enable SQL logging ang get the actual query that is hitting the DB
+ step 2 - Run Explain
+          Read the output - red flags
+          ┌─────────────────────────────────────────────────────────┐
+          │ type = ALL    → FULL TABLE SCAN ❌ biggest red flag      │
+          │ type = index  → full index scan (okay)                  │
+          │ type = ref    → index lookup ✅                         │
+          │ type = const  → single row lookup ✅✅ best             │
+          │                                                         │
+          │ rows = 20000  → scanning ALL rows ❌                    │
+          │ rows = 5      → only 5 rows scanned ✅                  │
+          │                                                         │
+          │ Extra = Using filesort    → no index for ORDER BY ❌    │
+          │ Extra = Using temporary   → temp table created ❌       │
+          │ Extra = Using index       → covered index ✅✅          │
+          └─────────────────────────────────────────────────────────┘
+
+ Step 3 Identify the root cause
+        Problem 1 missing index
+                -- Query filtering on unindexed column
+                SELECT * FROM orders WHERE status = 'PENDING';
+                -- DB scans ALL 20K rows to find PENDING ones ❌
+
+                -- Fix: Add index
+                CREATE INDEX idx_orders_status ON orders(status);
+
+                -- Composite index if filtering on multiple columns
+                CREATE INDEX idx_orders_status_created
+                ON orders(status, created_at DESC);
+        problem 2 N+1 query
+                // The silent killer — looks fine in code, disaster in DB
+
+                // You fetch 20K orders
+                List<Order> orders = orderRepo.findAll(); // 1 query
+
+                for (Order order : orders) {
+                    order.getUser().getName(); // triggers 1 query PER order
+                }
+                // Result: 1 + 20,000 = 20,001 queries fired ❌💥
+                this can be detected in logs
+                In logs you'll see the SAME query repeated thousands of times:
+                SELECT * FROM users WHERE id = ?   [id=1]
+                SELECT * FROM users WHERE id = ?   [id=2]
+                SELECT * FROM users WHERE id = ?   [id=3]
+                ... (20,000 times)
+
+                Fix
+                // Fix 1: JPQL JOIN FETCH
+                @Query("SELECT o FROM Order o JOIN FETCH o.user WHERE o.status = :status")
+                List<Order> findWithUser(@Param("status") String status);
+                // Result: 1 query with JOIN ✅
+
+                // Fix 2: @EntityGraph
+                @EntityGraph(attributePaths = {"user", "items"})
+                List<Order> findByStatus(String status);
+
+                // Fix 3: Batch size (partial fix)
+                @BatchSize(size = 100) // fetches 100 users in one IN query
+                private User user;
+        problem 3: No pagination, all 20K records fetched at once
+                // Fetching everything into memory ❌
+                List<Order> orders = orderRepo.findAll(); // loads 20K objects into heap
+
+                // Fix: Always paginate
+                Page<Order> orders = orderRepo.findAll(
+                    PageRequest.of(0, 20, Sort.by("createdAt").descending())
+                );
+                // Only 20 records fetched and loaded ✅
+                -- SQL level
+                SELECT * FROM orders
+                ORDER BY created_at DESC
+                LIMIT 20 OFFSET 0;
+        problem 4: Select * (fetching unnecessary columns)
+                  fix fetch only necessary columns
+        problem 5 : Function on Indexed Column (Index Bypass)
+
+        Situation: Order dashboard was loading in 200ms with 5K records.
+        After 3 months, data grew to 20K → response time jumped to 8 seconds.
+
+        Step 1: Enabled SQL logging → spotted N+1 on Order→User→Address chain
+                1 order fetch + 20K user queries + 20K address queries = 40,001 queries
+
+        Step 2: EXPLAIN showed type=ALL on orders.status column
+
+        Step 3: Fixes applied:
+                → Added composite index on (status, created_at)
+                → Changed findAll() to JOIN FETCH with pagination
+                → Used DTO projection instead of full entity
+
+        Result: 8 seconds → 180ms ✅
