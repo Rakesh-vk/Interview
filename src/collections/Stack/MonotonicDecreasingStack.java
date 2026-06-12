@@ -1,6 +1,8 @@
+package collections.Stack;
+
 import java.util.*;
 
-public class Main {
+public class MonotonicDecreasingStack {
 
     public static void main(String[] args) {
         int[] arr={1,2,5,3};

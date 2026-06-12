@@ -1,3 +1,8 @@
+package collections.Stack;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
 class MyStack {
     Queue<Integer> queue;
 

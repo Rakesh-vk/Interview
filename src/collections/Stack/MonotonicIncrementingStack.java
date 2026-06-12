@@ -1,16 +1,21 @@
+package collections.Stack;
+
 import java.util.*;
 
-public class Main {
+public class MonotonicIncrementingStack {
 
     public static void main(String[] args) {
         int[] arr={1,2,5,3};
-        StackUsingQueue(arr);
+        MonotonicIncreasingStack(arr);
         
     }
-    public static void StackUsingQueue(int[] arr){
-        Queue<Integer> stack = new Queue<>();
+    public static void MonotonicIncreasingStack(int[] arr){
+        Deque<Integer> stack = new ArrayDeque<>();
         
         for(int i=0;i<arr.length;i++){
+            while(!stack.isEmpty() && stack.peek() > arr[i]){
+                stack.pop();
+            }
             stack.push(arr[i]);
         }
         while(!stack.isEmpty()){
