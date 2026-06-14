@@ -144,19 +144,31 @@ public class impl {
         int left = 0, n = arr.length - 1, right = n, fp = 0, lp = 0;
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            if (arr[mid] == num) {
+            if(arr[mid] == num){
                 fp = mid;
                 right = mid - 1;
-            } else left = mid + 1;
+            }
+            else if(arr[mid] < num){
+                left = mid + 1;
+            }
+            else{
+                right = mid - 1;
+            }
         }
         left = 0;
         right = n;
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            if (arr[mid] == num) {
+            if(arr[mid] == num){
                 lp = mid;
                 left = mid + 1;
-            } else right = mid - 1;
+            }
+            else if(arr[mid] < num){
+                left = mid + 1;
+            }
+            else{
+                right = mid - 1;
+            }
         }
         System.out.println(" first position : " + fp);
         System.out.println(" last position : " + lp);

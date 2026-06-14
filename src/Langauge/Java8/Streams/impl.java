@@ -1,4 +1,4 @@
-package Java8.Streams;
+package Langauge.Java8.Streams;
 
 import java.util.*;
 import java.util.function.Function;
@@ -31,7 +31,7 @@ class Employee {
 
     @Override
     public String toString() {
-        return String.format("Employee{id=%d, name='%s', age=%d, gender='%s', salary=%.2f}", id, name, age, gender, salary);
+        return String.format("Langauge.Employee{id=%d, name='%s', age=%d, gender='%s', salary=%.2f}", id, name, age, gender, salary);
     }
 }
 public class impl {

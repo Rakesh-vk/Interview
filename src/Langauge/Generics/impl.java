@@ -1,4 +1,4 @@
-package Generics;
+package Langauge.Generics;
 
 class generic<T>{
     private T t;

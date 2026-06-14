@@ -5,7 +5,7 @@ import java.util.*;
 public class MonotonicIncrementingStack {
 
     public static void main(String[] args) {
-        int[] arr={1,2,5,3};
+        int[] arr={-2,0,-3};
         MonotonicIncreasingStack(arr);
         
     }

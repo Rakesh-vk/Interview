@@ -2,17 +2,17 @@ package collections.List;
 
 import java.util.Stack;
 
-class LinkedList{
-    Node head;
-    static class Node{
-        int data;
-        Node next;
-        Node(int data){
+class MyLinkedList<T> {
+    Node<T> head;
+    static class Node<T>{
+        T data;
+        Node<T> next;
+        Node(T data){
             this.data=data;
             this.next=null;
         }
     }
-    public static LinkedList insert(LinkedList list,int data){
+    public static MyLinkedList insert(MyLinkedList list, int data){
         // create a new node with data
         Node newNode= new Node(data);
         // to insert we must first check if the list is empty
@@ -29,7 +29,7 @@ class LinkedList{
         }
         return list;
     }
-    public static void printList(LinkedList list){
+    public static void printList(MyLinkedList list){
         Node itr=list.head;
         while(itr!=null) {
             System.out.print(itr.data+" -> ");
@@ -37,7 +37,7 @@ class LinkedList{
         }
         System.out.print("null \n");
     }
-    public static void deleteByKey(LinkedList list, int key){
+    public void deleteByKey(MyLinkedList list, T key){
 
         Node next = list.head;
         Node prev = null;
@@ -53,10 +53,10 @@ class LinkedList{
             prev.next=next.next;
         }
     }
-    public static void deleteFirstNode(LinkedList list){
+    public static void deleteFirstNode(MyLinkedList list){
         list.head=list.head.next;
     }
-    public static void deleteLastNode(LinkedList list){
+    public static void deleteLastNode(MyLinkedList list){
         Node curNode=list.head,prev=null;
         // traverse to end
         while(curNode.next!=null){
@@ -67,7 +67,7 @@ class LinkedList{
 
 
     }
-    public static void insertAfterKey(LinkedList list,int key,int data){
+    public void insertAfterKey(MyLinkedList list, T key, T data){
         // case 1 element/key is present
         // element/ key is present at start
         Node curNode= list.head;
@@ -92,17 +92,17 @@ class LinkedList{
         // element/ key is present at end
         // case 2 element/key is not present
     }
-    public static void reverseLinkedListUsingStack(LinkedList list){
+    public void reverseLinkedListUsingStack(MyLinkedList list){
         // here I am using stack to store the data in stack as stack works on LIFO
         // first iteration will add the elements to stack
         // second iteration will add the element to linkedlist in reverse order
         // time complexity O(n) = O(n) first iteration + O(n) second iteration.
         // space complexity O(n) as we are adding n elements to stack.
         // not efficient way as the stack will take n memory
-        Stack<Integer> st= new Stack<>();
+        Stack<T> st= new Stack<>();
         Node temp = list.head;
         while(temp!=null){
-            st.add(temp.data);
+            st.add((T) temp.data);
             temp=temp.next;
         }
         temp = list.head;
@@ -112,7 +112,7 @@ class LinkedList{
         }
         printList(list);
     }
-    public static void reverseLinkedListUsingTwoPointers(LinkedList list) {
+    public static void reverseLinkedListUsingTwoPointers(MyLinkedList list) {
         // using the two pointers one is curNode another is prevNode
         // loop till temp reaches null i.e while(temp!=null)
         // save curNode.next in a variable i.e Node nextNode = curNode.next
@@ -135,7 +135,7 @@ class LinkedList{
         list.head=prev;
         printList(list);
      }
-     public static void reverseLinkedListUsingRecursion(LinkedList list){
+     public static void reverseLinkedListUsingRecursion(MyLinkedList list){
         //recursion is checking what we are doing repeatedly and finding the base case
          // and working in backword order
          // time complexity O(n)
@@ -159,14 +159,14 @@ class LinkedList{
 }
 public class LinkedLists {
     public static void main(String[] args) {
-        LinkedList list= new LinkedList();
-        list = LinkedList.insert(list,10);
-        list = LinkedList.insert(list,20);
-        list = LinkedList.insert(list,30);
-        list = LinkedList.insert(list,40);
-        list = LinkedList.insert(list,50);
-        LinkedList.printList(list);
-        LinkedList.reverseLinkedListUsingRecursion(list);
+        MyLinkedList list= new MyLinkedList();
+        list = MyLinkedList.insert(list,10);
+        list = MyLinkedList.insert(list,20);
+        list = MyLinkedList.insert(list,30);
+        list = MyLinkedList.insert(list,40);
+        list = MyLinkedList.insert(list,50);
+        MyLinkedList.printList(list);
+        MyLinkedList.reverseLinkedListUsingRecursion(list);
 
 //        LinkedList.reverseLinkedListUsingTwoPointers(list);
 //        LinkedList.printList(list);

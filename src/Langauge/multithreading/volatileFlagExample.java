@@ -1,4 +1,4 @@
-package multithreading;
+package Langauge.multithreading;
 
 // volatile only provides visibility
 // volatile is particularly useful when we need to ensure visibility of a variable's updates across threads but do not require atomicity

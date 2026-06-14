@@ -1,4 +1,4 @@
-package multithreading;
+package Langauge.multithreading;
 
 public class printingEvenAndOddNumbersWithDifferentThreads {
     public volatile int count=1;

@@ -1,4 +1,4 @@
-package multithreading;
+package Langauge.multithreading;
 
 public class BankAccountWithdrawal {
     int balance;

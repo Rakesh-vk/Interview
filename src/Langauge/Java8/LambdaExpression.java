@@ -1,4 +1,4 @@
-package Java8;
+package Langauge.Java8;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

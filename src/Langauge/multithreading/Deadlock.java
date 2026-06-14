@@ -1,4 +1,4 @@
-package multithreading;
+package Langauge.multithreading;
 
 public class Deadlock {
     private static final Object resourceA = new Object();

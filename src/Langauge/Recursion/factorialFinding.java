@@ -1,4 +1,4 @@
-package Recursion;
+package Langauge.Recursion;
 
 public class factorialFinding {
     public static void main(String[] args) {

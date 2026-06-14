@@ -1,4 +1,4 @@
-package Recursion;
+package Langauge.Recursion;
 
 public class fibonacciSeries {
     public static void main(String[] args) {

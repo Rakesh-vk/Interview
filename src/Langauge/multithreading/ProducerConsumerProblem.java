@@ -1,4 +1,4 @@
-package multithreading;
+package Langauge.multithreading;
 
 import java.util.LinkedList;
 import java.util.Queue;

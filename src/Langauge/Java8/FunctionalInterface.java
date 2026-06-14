@@ -1,4 +1,4 @@
-package Java8;
+package Langauge.Java8;
 // A Functional Interface in Java is an interface that contains exactly one abstract method.
 /*
 It can have:

@@ -1,3 +1,5 @@
+package Langauge;
+
 public class Employee {
     private String name;
     private String dept;
@@ -23,7 +25,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" +
+        return "Langauge.Employee{" +
                 "name='" + name + '\'' +
                 ", dept='" + dept + '\'' +
                 ", salary=" + salary +

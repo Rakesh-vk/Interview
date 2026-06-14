@@ -1,10 +1,11 @@
-
+package interview;
 
 // create class that will be singleton class
 
+import Langauge.Employee;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 class Singleton{

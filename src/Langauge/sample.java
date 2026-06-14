@@ -1,6 +1,4 @@
-import org.junit.runner.Runner;
-
-import java.util.Objects;
+package Langauge;
 
 public class sample {
     public static void main(String[] args) {

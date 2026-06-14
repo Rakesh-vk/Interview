@@ -1,4 +1,6 @@
-public class Main {
+package Algorithums;
+
+public class SortingAlgos {
 
     public static void main(String[] args) {
         int[] arr={5,1,4,3};
