@@ -1,0 +1,52 @@
+
+Java Karat Theoretical Questions
+
+
+
+1) How to make the code as thread safe in multithreading
+
+2) How to throws an exception in a code
+
+3) Difference btw equals() and hashcode(), output questions
+
+4) A code for singleton class is given but it is returning multiple objects  still. What could be possible reason?
+
+"A map is given but its get method is sometimes returning null. What could be the reason for it? it has been confirmed that there is no concurrency issue in it, the key exists, the value of the key is not null and map has not been cleared
+
+Why is this get method returning null?"
+
+A java code snippet is provided. Identify and suggest any necessary optimizations to enhance its optimization.
+
+6) How to throw custom exception when a specific condition is met?
+
+7) How does dependency injection works, how does it make a software better?
+
+8)Is keys in a Map be mutable? Why or why not?
+
+9)Advantages and Disadvantages of Checked Exceptions?
+
+10)Upper Bounded Wildcard (<? extends Animal>) and Lower Bound Wildcard  (<? super Animal>)
+
+11)How the objects are moved in the heap memory. Explain the different generations
+
+12)what are tactics used to make the class more testable
+
+13)hashmap internals - create custom class, what will be the uses if used as key, then how to resolve it, then treemap internals, will this issue persist in treemap or not, how it works internally, then linkedhashmap and hasmap difference and internal workings.
+
+14) if a hashmap is used as a shared resource with 10 threads , what will be the issues and how to prevent them
+
+15) scenario- if we want top 10 records at any point with incoming stream of data which data structure whould we use- priority queue and then its internal, how it works then heap , then how heap works internally
+
+16 stream question
+
+when it is preferred over for loop, advantage disadavantages over for loop
+
+17) if you have a microservice with 15 beans , what problems will arise and how to refactor it.
+
+18) what issues occurs with field injection
+
+19) sql, postgresql, how to create indexes, what to consider for this, types of indexes, can a table has more than 1 index,
+
+20) sql query questions, 2 tables given , follow up questions to write sql queries, mostly with join and group by
+
+why groupby is before where clause
