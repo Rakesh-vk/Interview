@@ -1,9 +1,26 @@
+import java.util.HashMap;
 
 class Test{
     public static void main(String[] args) {
-        int[] nums = {5,7,7,8,8,10};
-        int target=8;
+        int[] arr={100,200,300,400};
+        int k=1;
+        System.out.println(maxSubarraySum(arr,k));
 
+
+    }
+    public static  int maxSubarraySum(int[] arr, int k) {
+        int maxSum=0;
+        int n=arr.length,i=0,j=0,sum=0;
+        while(j<n){
+            sum+=arr[j];
+            if(j-i+1==k){
+                maxSum = Math.max(sum,maxSum);
+                sum-=arr[i];
+                i++;
+            }
+            j++;
+        }
+        return maxSum;
 
     }
 }

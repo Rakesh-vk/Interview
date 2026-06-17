@@ -28,15 +28,13 @@ public class Impl {
 //        selectionInDescendingOrder(arr);
 //          bubbleSort(arr);
 //            InsertionSort(arr);
-
 //        printArray(mergeSort(arr));
-
 //        int[] nums1={4,9,5},nums2={9,4,9,8,4};
 //        printArray(intersection(nums1,nums2));
         int[] arr2={1,0,2,1,2};
 //        printAllSubarrayOfLengthK(arr2,2);
-//        printSumSubarrayOfLengthK(arr2,2);
-        runningSum(arr2);
+        printSumSubarrayOfLengthK(arr2,2);
+//        runningSum(arr2);
     }
     public static void printSumSubarrayOfLengthK(int[] arr,int k){
         int i=0,j=0,n=arr.length;
