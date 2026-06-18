@@ -96,6 +96,42 @@ class MusicPlatform {
     Map<Integer, Song> songs = new HashMap<>();
     Map<Integer, List<PlayEvent>> playMap = new HashMap<>();
 
+    public List<String> getTopListeners(int n){
+
+        Map<String,Integer> totalTime= new HashMap<>();
+        for(List<PlayEvent> p: playMap.values()){
+            for(PlayEvent p1:p){
+                totalTime.put(p1.userId,totalTime.getOrDefault(p1.userId,0)+p1.durationSec);
+            }
+        }
+        List<Map.Entry<String, Integer>> listeners =
+                new ArrayList<>(totalTime.entrySet());
+
+        listeners.sort((a, b) -> {
+            if (!a.getValue().equals(b.getValue())) {
+                return b.getValue() - a.getValue(); // descending time
+            }
+            return a.getKey().compareTo(b.getKey()); // alphabetical
+        });
+
+        List<String> result = new ArrayList<>();
+
+        for (int i = 0; i < Math.min(n, listeners.size()); i++) {
+            result.add(listeners.get(i).getKey());
+        }
+
+        return result;
+    }
+
+    public void logPlay(int songId, PlayEvent event) {
+        if (!songs.containsKey(songId)) {
+            return;
+        }
+
+        playMap.computeIfAbsent(songId, k -> new ArrayList<>())
+                .add(event);
+    }
+
     void addSong(Song s) { songs.put(s.songId, s); }
 
 
@@ -104,7 +140,7 @@ class MusicPlatform {
         List<PlayEvent> events = playMap.get(songId);
         if (events != null) {
             for (PlayEvent e : events) {
-                total -= e.durationSec;
+                total += e.durationSec;
             }
         }
         return total;
@@ -118,7 +154,7 @@ public class Q5_MusicStreaming {
     public static void main(String[] args) {
         testSong();
         testTotalListeningTime();
-        // testLogPlayAndTopListeners();
+        testLogPlayAndTopListeners();
         System.out.println("All tests passed.");
     }
 
@@ -151,7 +187,7 @@ public class Q5_MusicStreaming {
     }
 
     // ── TASK 2 + TASK 3 tests ────────────────────────────────────────────────
-    /*
+
     public static void testLogPlayAndTopListeners() {
         System.out.println("Running testLogPlayAndTopListeners");
         MusicPlatform mp = new MusicPlatform();
@@ -190,6 +226,7 @@ public class Q5_MusicStreaming {
         Assert.assertEquals("Bob",     topAll.get(0));
         Assert.assertEquals("Alice",   topAll.get(1));
         Assert.assertEquals("Charlie", topAll.get(2));
+
     }
-    */
+
 }

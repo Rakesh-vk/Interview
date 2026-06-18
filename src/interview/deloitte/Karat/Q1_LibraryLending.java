@@ -169,7 +169,7 @@ public class Q1_LibraryLending {
     public static void main(String[] args) {
         testBook();
         testLibrary();
-        // testAddLendingAndFrequentBorrowers();
+        testAddLendingAndFrequentBorrowers();
         System.out.println("All tests passed.");
     }
 

@@ -109,6 +109,30 @@ class AuctionHouse {
     List<AuctionItem> items = new ArrayList<>();
     Map<Integer, List<Bid>> bidMap = new HashMap<>();
 
+    public Map<Integer,Double> getHighestBidPerItem(){
+        Map<Integer,Double> result= new HashMap<>();
+        for(Map.Entry<Integer,List<Bid>> bids:bidMap.entrySet()) {
+            Double max=0.0;
+            for (Bid bid : bids.getValue()) {
+                if (max <bid.amount){
+                    max=bid.amount;
+                }
+            }
+            result.put(bids.getKey(), max);
+        }
+        return result;
+    }
+
+    public void placeBid(int itemId, Bid bid){
+        for(AuctionItem ai:items){
+            if(itemId==ai.itemId && ai.status==ItemStatus.ACTIVE){
+                bidMap.computeIfAbsent(itemId,k-> new ArrayList<>()).add(bid);
+                return;
+            }
+        }
+    }
+
+
     void addItem(AuctionItem item) { items.add(item); }
 
     void updateItemStatus(int itemId, ItemStatus status) {
@@ -124,7 +148,7 @@ class AuctionHouse {
         for (AuctionItem item : items) {
             // BUG: counts EXPIRED as active (should be ACTIVE only)
             if (item.status == ItemStatus.ACTIVE
-                    || item.status == ItemStatus.EXPIRED) {
+                    || item.status == ItemStatus.ACTIVE) {
                 active++;
             }
         }
@@ -140,7 +164,7 @@ public class Q6_AuctionBidding {
     public static void main(String[] args) {
         testAuctionItem();
         testAuctionStats();
-        // testPlaceBidAndHighestBid();
+        testPlaceBidAndHighestBid();
         System.out.println("All tests passed.");
     }
 
@@ -173,7 +197,7 @@ public class Q6_AuctionBidding {
     }
 
     // ── TASK 2 + TASK 3 tests ────────────────────────────────────────────────
-    /*
+
     public static void testPlaceBidAndHighestBid() {
         System.out.println("Running testPlaceBidAndHighestBid");
         AuctionHouse ah = new AuctionHouse();
@@ -210,5 +234,5 @@ public class Q6_AuctionBidding {
         Assert.assertFalse(highest.containsKey(30));
         Assert.assertFalse(highest.containsKey(99));
     }
-    */
+
 }

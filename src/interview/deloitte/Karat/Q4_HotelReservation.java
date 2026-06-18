@@ -121,6 +121,17 @@ class Hotel {
 
     // TODO: Implement addReservation(int roomId, Reservation reservation)
     // TODO: Implement getGuestNights()
+    public Map<String, Integer> getGuestNights(){
+        Map<String,Integer> stays= new HashMap<>();
+        for(List<Reservation> reservation: reservationMap.values()){
+            for(Reservation r:reservation){
+                stays.put(r.guestName
+                        ,stays.getOrDefault(r.guestName,0)+r.getNights());
+
+            }
+        }
+        return stays;
+    }
 
     HotelStats getHotelStats() {
         int total = rooms.size();
@@ -128,12 +139,20 @@ class Hotel {
         for (Room r : rooms) {
             if (r.status == RoomStatus.AVAILABLE
                     || r.status == RoomStatus.OCCUPIED
-                    || r.status == RoomStatus.MAINTENANCE) {
+                    || r.status == RoomStatus.RESERVED) {
                 bookable++;
             }
         }
         double rate = (bookable / (double) total) * 100.0;
         return new HotelStats(total, bookable, rate);
+    }
+
+    public void addReservation(int roomId, Reservation reservation) {
+        for(Room room:rooms){
+            if(room.roomId==roomId){
+                reservationMap.computeIfAbsent(roomId,k-> new ArrayList<>()).add(reservation);
+            }
+        }
     }
 }
 
@@ -144,7 +163,7 @@ public class Q4_HotelReservation {
     public static void main(String[] args) {
         testRoom();
         testHotel();
-        // testAddReservationAndGuestNights();
+        testAddReservationAndGuestNights();
         System.out.println("All tests passed.");
     }
 
@@ -175,7 +194,7 @@ public class Q4_HotelReservation {
     }
 
     // ── TASK 2 + TASK 3 tests ────────────────────────────────────────────────
-    /*
+
     public static void testAddReservationAndGuestNights() {
         System.out.println("Running testAddReservationAndGuestNights");
         Hotel hotel = new Hotel();
@@ -206,5 +225,5 @@ public class Q4_HotelReservation {
         Assert.assertEquals(Integer.valueOf(3), gn.get("Charlie"));
         Assert.assertFalse(gn.containsKey("Dave"));
     }
-    */
+
 }

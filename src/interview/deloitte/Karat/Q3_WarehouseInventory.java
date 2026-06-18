@@ -97,6 +97,24 @@ class Warehouse {
     Map<Integer, Product> products = new HashMap<>();
     List<StockMovement> movements = new ArrayList<>();
 
+    public List<String> getLowStockProducts(int threshold){
+        List<String> result= new ArrayList<>();
+        for(Product p:products.values()){
+            int stock=getCurrentStock(p.productId);
+            if(stock<=threshold){
+                result.add(p.name);
+            }
+        }
+
+        return result;
+    }
+
+    public void recordMovement(int productId, StockMovement movement) {
+        if (products.containsKey(productId)) {
+            movements.add(movement);
+        }
+    }
+
     void addProduct(Product p) { products.put(p.productId, p); }
 
     void addMovement(StockMovement m) { movements.add(m); }
@@ -110,11 +128,15 @@ class Warehouse {
                 if (m.type == MovementType.IN) {
                     stock += m.quantity;
                 }
+                else
+                    stock-=m.quantity;
 
             }
         }
         return stock;
     }
+
+
 }
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
@@ -158,7 +180,7 @@ public class Q3_WarehouseInventory {
     }
 
     // ── TASK 2 + TASK 3 tests ────────────────────────────────────────────────
-    /*
+
     public static void testRecordMovementAndLowStock() {
         System.out.println("Running testRecordMovementAndLowStock");
         Warehouse wh = new Warehouse();
@@ -201,5 +223,5 @@ public class Q3_WarehouseInventory {
         List<String> none = wh.getLowStockProducts(-1);
         Assert.assertTrue(none.isEmpty());
     }
-    */
+
 }
