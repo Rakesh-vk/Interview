@@ -10,7 +10,10 @@ class Test{
     }
     public static  int maxSubarraySum(int[] arr, int k) {
         int maxSum=0;
-        int n=arr.length,i=0,j=0,sum=0;
+        int n=arr.length;
+        int i=0;
+        int j=0;
+        int sum=0;
         while(j<n){
             sum+=arr[j];
             if(j-i+1==k){
