@@ -1,4 +1,4 @@
-package Algorithums;
+package collections.Algorithums;
 
 public class SortingAlgos {
 
