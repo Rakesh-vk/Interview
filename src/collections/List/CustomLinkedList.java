@@ -23,6 +23,14 @@ public class CustomLinkedList{
         temp.next=newNode;
 
     }
+    public void print(){
+        Node temp = head;
+        while(temp!=null){
+            System.out.print(temp.data+" ");
+            temp=temp.next;
+        }
+        System.out.println();
+    }
     public int findMiddle(){
         Node slow=head,fast=head;
         while (fast!= null && fast.next!=null){

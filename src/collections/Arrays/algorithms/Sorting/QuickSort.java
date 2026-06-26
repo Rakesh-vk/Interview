@@ -1,8 +1,20 @@
 package collections.Arrays.algorithms.Sorting;
 
 public class QuickSort {
-    // partition function
+/*
+    1. Choose a pivot element.
+    2. Partition the array so that:
+      - Smaller elements are on the left.
+      - Larger elements are on the right.
+    3. Pivot reaches its correct sorted position.
+    4. Recursively apply the same process to left and right subarrays.
+    time complexity : O(n log n)
+    space complexity : O()
+
+
+    // partition function*/
     static int partition(int[] arr, int low, int high) {
+
 
         // choose the pivot
         int pivot = arr[high];

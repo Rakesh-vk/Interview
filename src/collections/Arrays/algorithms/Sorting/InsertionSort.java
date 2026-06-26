@@ -3,6 +3,8 @@ package collections.Arrays.algorithms.Sorting;
 // Java program for implementation of Insertion Sort
 public class InsertionSort {
     /* Function to sort array using insertion sort */
+    // time complexity : O(n^2)
+    // space complexity : O(1)
     void sort(int arr[])
     {
         int n = arr.length;

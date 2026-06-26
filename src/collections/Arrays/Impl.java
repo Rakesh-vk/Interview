@@ -33,8 +33,10 @@ public class Impl {
 //        printArray(intersection(nums1,nums2));
         int[] arr2={1,0,2,1,2};
 //        printAllSubarrayOfLengthK(arr2,2);
-        printSumSubarrayOfLengthK(arr2,2);
+       // printSumSubarrayOfLengthK(arr2,2);
 //        runningSum(arr2);
+        int[] array={1,2,3,4,5};
+        printSumOfAllSubarrayOfLengthK(array,2);
     }
     public static void printSumSubarrayOfLengthK(int[] arr,int k){
         int i=0,j=0,n=arr.length;
@@ -63,6 +65,18 @@ public class Impl {
                 i++;
             }
              j++;
+        }
+    }
+    public static void printSumOfAllSubarrayOfLengthK(int[] arr,int k){
+        int i=0,j=0,n=arr.length,sum=0;
+        while(j<n){
+            sum+=arr[j];
+            if(j-i+1==k){
+                System.out.println(sum);
+                sum-=arr[i];
+                i++;
+            }
+            j++;
         }
     }
     public static void print(int[] arr,int start,int end){

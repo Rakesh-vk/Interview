@@ -1,3 +1,5 @@
+package Misc.Cache;
+
 import java.util.HashMap;
 import java.util.Map;
 

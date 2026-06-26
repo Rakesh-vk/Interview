@@ -1,87 +1,86 @@
 package collections.Arrays.algorithms.Sorting;
 
+// 1.Divide the array until each subarray contains one element.
+// 2.Recursively sort the left and right halves.
+// 3.Merge the two sorted halves by comparing elements.
+// 4.Use a temporary array during merging.
+// 5.Copy merged elements back to the original array.
+// Time complexity: O(n log n)
+// space Complexity : O(n)
+import java.util.Arrays;
+
 public class MergeSort {
-    // Merges two subarrays of arr[].
-    // First subarray is arr[l..m]
-    // Second subarray is arr[m+1..r]
-    static void merge(int arr[], int l, int m, int r){
 
-        // Find sizes of two subarrays to be merged
-        int n1 = m - l + 1;
-        int n2 = r - m;
+    // Recursively divide the array into two halves
+    public static void mergeSort(int[] arr, int left, int right) {
 
-        // Create temp arrays
-        int L[] = new int[n1];
-        int R[] = new int[n2];
-
-        // Copy data to temp arrays
-        for (int i = 0; i < n1; ++i)
-            L[i] = arr[l + i];
-        for (int j = 0; j < n2; ++j)
-            R[j] = arr[m + 1 + j];
-
-        // Merge the temp arrays
-
-        // Initial indices of first and second subarrays
-        int i = 0, j = 0;
-
-        // Initial index of merged subarray array
-        int k = l;
-        while (i < n1 && j < n2) {
-            if (L[i] <= R[j]) {
-                arr[k] = L[i];
-                i++;
-            }
-            else {
-                arr[k] = R[j];
-                j++;
-            }
-            k++;
+        // Base case: array has only one element
+        if (left >= right) {
+            return;
         }
 
-        // Copy remaining elements of L[] if any
-        while (i < n1) {
-            arr[k] = L[i];
-            i++;
-            k++;
+        // Find middle index
+        int mid = left + (right - left) / 2;
+
+        // Sort left half
+        mergeSort(arr, left, mid);
+
+        // Sort right half
+        mergeSort(arr, mid + 1, right);
+
+        // Merge the two sorted halves
+        merge(arr, left, mid, right);
+    }
+
+    // Merge two sorted subarrays
+    private static void merge(int[] arr, int left, int mid, int right) {
+
+        // Temporary array to store merged result
+        int[] temp = new int[right - left + 1];
+
+        // Pointer for left subarray
+        int i = left;
+
+        // Pointer for right subarray
+        int j = mid + 1;
+
+        // Pointer for temp array
+        int k = 0;
+
+        // Compare elements from both halves and copy smaller one
+        while (i <= mid && j <= right) {
+            if (arr[i] <= arr[j]) {
+                temp[k++] = arr[i++];
+            } else {
+                temp[k++] = arr[j++];
+            }
         }
 
-        // Copy remaining elements of R[] if any
-        while (j < n2) {
-            arr[k] = R[j];
-            j++;
-            k++;
+        // Copy remaining elements from left half
+        while (i <= mid) {
+            temp[k++] = arr[i++];
+        }
+
+        // Copy remaining elements from right half
+        while (j <= right) {
+            temp[k++] = arr[j++];
+        }
+
+        // Copy merged result back to original array
+        for (int p = 0; p < temp.length; p++) {
+            arr[left + p] = temp[p];
         }
     }
 
-    // Main function that sorts arr[l..r] using
-    // merge()
-    static void mergeSort(int arr[], int l, int r){
+    public static void main(String[] args) {
 
-        if (l < r) {
+        // Input array
+        int[] arr = {1, 5, 2, 7, 3, 8, 4};
 
-            // Find the middle point
-            int m = l + (r - l) / 2;
-
-            // Sort first and second halves
-            mergeSort(arr, l, m);
-            mergeSort(arr, m + 1, r);
-
-            // Merge the sorted halves
-            merge(arr, l, m, r);
-        }
-    }
-
-    // Driver code
-    public static void main(String args[]){
-
-        int arr[] = {38, 27, 43, 10};
-
+        // Sort the array
         mergeSort(arr, 0, arr.length - 1);
 
-        int n = arr.length;
-        for (int i = 0; i < n; ++i)
-            System.out.print(arr[i] + " ");
-        System.out.println();
+        // Print sorted array
+        System.out.println(Arrays.toString(arr));
     }
 }
