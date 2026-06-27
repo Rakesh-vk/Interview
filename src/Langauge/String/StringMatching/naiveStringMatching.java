@@ -1,4 +1,4 @@
-package Langauge.String;
+package Langauge.String.StringMatching;
 
 /*
  * ------------------------------------------------------------
