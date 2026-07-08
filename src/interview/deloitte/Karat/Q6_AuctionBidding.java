@@ -147,8 +147,7 @@ class AuctionHouse {
         int active = 0;
         for (AuctionItem item : items) {
             // BUG: counts EXPIRED as active (should be ACTIVE only)
-            if (item.status == ItemStatus.ACTIVE
-                    || item.status == ItemStatus.ACTIVE) {
+            if (item.status == ItemStatus.ACTIVE) {
                 active++;
             }
         }

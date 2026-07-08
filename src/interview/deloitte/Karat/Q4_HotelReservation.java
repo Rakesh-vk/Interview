@@ -150,7 +150,8 @@ class Hotel {
     public void addReservation(int roomId, Reservation reservation) {
         for(Room room:rooms){
             if(room.roomId==roomId){
-                reservationMap.computeIfAbsent(roomId,k-> new ArrayList<>()).add(reservation);
+                reservationMap.computeIfAbsent(roomId,k-> new ArrayList<>())
+                        .add(reservation);
             }
         }
     }

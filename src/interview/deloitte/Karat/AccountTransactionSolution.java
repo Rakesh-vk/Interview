@@ -90,51 +90,42 @@ class AccountManager {
         // Transactions always refer to valid accounts.
         transactions.add(tx);
     }
-
     // Returns the current balance of an account.
     double getBalance(int accountId) {
         double balance = 0.0;
-
         for (Transaction tx : transactions) {
             if (tx.accountId == accountId) {
-                if (tx.type == TransactionType.CREDIT) {
+                if (tx.type == TransactionType.CREDIT)
                     balance += tx.amount;
-                } else {
+                else
                     balance -= tx.amount;
-                }
             }
         }
-
         return balance;
     }
 
     // Returns average transaction amount for each account.
     public Map<Integer, Double> getAverageTransactionAmountByAccount() {
-
         Map<Integer, Double> totalAmount = new HashMap<>();
         Map<Integer, Integer> transactionCount = new HashMap<>();
-
         for (Transaction tx : transactions) {
             totalAmount.put(
                     tx.accountId,
-                    totalAmount.getOrDefault(tx.accountId, 0.0) + Math.abs(tx.amount)
+                    totalAmount.getOrDefault(tx.accountId, 0.0)
+                            + Math.abs(tx.amount)
             );
-
             transactionCount.put(
                     tx.accountId,
                     transactionCount.getOrDefault(tx.accountId, 0) + 1
             );
         }
-
         Map<Integer, Double> result = new HashMap<>();
-
         for (Integer accountId : totalAmount.keySet()) {
             result.put(
                     accountId,
                     totalAmount.get(accountId) / transactionCount.get(accountId)
             );
         }
-
         return result;
     }
 }

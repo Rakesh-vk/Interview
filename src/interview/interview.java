@@ -8,18 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class Singleton{
-    private  Singleton obj;
-    private Singleton(){
-    }
-
-    public synchronized  Singleton getObj(){
-        if(obj!=null)
-        {
-            return obj;}
-
-        return obj;
-    }
+enum Singleton {
+    INSTANCE;
 }
 
 
@@ -35,11 +25,11 @@ public class interview {
         emp.add(new Employee("Jonny","finance",100));
 
         emp.stream()
-                .collect(Collectors.groupingBy(Employee::getDept))
-                .entrySet()
-                .stream()
-                .forEach(x->System.out.println(x.getKey()+" "+x.getValue()));
-
+                .collect(Collectors.groupingBy(
+                        Employee::getDept,
+                        Collectors.mapping(Employee::getName, Collectors.toList())
+                ))
+                .forEach((dept, names) -> System.out.println(dept + " -> " + names));
 
     }
 }

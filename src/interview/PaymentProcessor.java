@@ -22,22 +22,32 @@ import java.util.HashSet;
 // Header:
 // Idempotency-key : <key>
 // store it in DB anc check for each request that request is already present or not if not then process and save it else return the previous status
+import java.util.HashSet;
+import java.util.Set;
+
 public class PaymentProcessor {
-    private HashSet<String> processedKeys = new HashSet<>();
+
+    private final Set<String> processedKeys = new HashSet<>();
 
     public String processPayment(String idempotencyKey) {
-        // Implement the logic to check and process the payment
-        if(processedKeys.contains(idempotencyKey)){
-            return "Payment already in processing";
+
+        if (processedKeys.contains(idempotencyKey)) {
+            return "Payment already processed.";
         }
+
+        // Simulate payment processing
         processedKeys.add(idempotencyKey);
-        return " payment processed successfully for key";
+
+        return "Payment processed successfully.";
     }
 
     public static void main(String[] args) {
+
         PaymentProcessor processor = new PaymentProcessor();
-        System.out.println(processor.processPayment("key123")); // First attempt
-        System.out.println(processor.processPayment("key123")); // Duplicate attempt
+
+        System.out.println(processor.processPayment("key123"));
+        System.out.println(processor.processPayment("key123"));
+        System.out.println(processor.processPayment("key456"));
     }
 }
 

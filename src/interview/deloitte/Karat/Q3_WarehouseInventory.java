@@ -130,7 +130,6 @@ class Warehouse {
                 }
                 else
                     stock-=m.quantity;
-
             }
         }
         return stock;

@@ -1,8 +1,10 @@
+package interview;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class interview {
+public class interview1_1 {
     public static void main(String[] args) {
         Map<String,Integer> map= new HashMap<>();
         map.put("aaa",40);
