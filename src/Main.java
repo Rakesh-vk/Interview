@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -44,6 +43,15 @@ public class Main {
             }
         System.out.println(c1);
 
+    }
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer,Integer> freq= new HashMap<>();
+        for(int n:nums){
+            freq.put(n,freq.getOrDefault(n,0)+1);
+        }
+        return freq.entrySet().stream().sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed()).limit(k)
+                .mapToInt(Map.Entry::getKey)
+                .toArray();
     }
 
 
