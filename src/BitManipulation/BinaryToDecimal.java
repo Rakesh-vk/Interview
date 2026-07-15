@@ -7,7 +7,7 @@ public class BinaryToDecimal {
         for(int i=binary.length()-1;i>=0;i--){
             char ch = binary.charAt(i);
             if(ch=='1'){
-                num += Math.pow(2,j);
+                num += (int) Math.pow(2,j);
             }
             j++;
         }
