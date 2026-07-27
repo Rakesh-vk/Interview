@@ -1,5 +1,6 @@
 package leetcode.Daily;
-
+// brute force solution is to sort the array and get the max 2 elements and find the product of them TC : O(n log n) for sorting.
+// Optimized solution is to find the max 2 elements in one pass then find the products and return it TC : O(n) SC O(1).
 public class _1464MaximumProductOfTwoElementsInAnArray {
     public static void main(String[] args) {
         int[] arr={3,4,5,2};
