@@ -237,36 +237,38 @@ class StockCollection {
 
     public Object[] getBiggestChange() {
 
-        if (priceRecords == null || priceRecords.size() < 2) {
+        if (priceRecords.size() < 2) {
             return null;
         }
 
-        List<PriceRecord> sortedRecords = priceRecords.stream()
-                .sorted(Comparator.comparing(pr -> pr.date)).collect(Collectors.toList());
+        List<PriceRecord> sorted = new ArrayList<>(priceRecords);
+        sorted.sort(Comparator.comparing(record -> record.date));
 
-        int maxAbsChange = Integer.MIN_VALUE;
-        Object[] result = null;
+        int maxAbsChange = -1;
+        int bestChange = 0;
+        String fromDate = null;
+        String toDate = null;
 
-        for (int i = 1; i < sortedRecords.size(); i++) {
+        for (int i = 1; i < sorted.size(); i++) {
 
-            PriceRecord prev = sortedRecords.get(i - 1);
-            PriceRecord curr = sortedRecords.get(i);
+            PriceRecord previous = sorted.get(i - 1);
+            PriceRecord current = sorted.get(i);
 
-            int change = curr.price - prev.price;
+            int change = current.price - previous.price;
 
-            // 🔥 compare absolute value
             if (Math.abs(change) > maxAbsChange) {
                 maxAbsChange = Math.abs(change);
-
-                result = new Object[]{
-                        change,          // keep original (+/-)
-                        prev.date,
-                        curr.date
-                };
+                bestChange = change;
+                fromDate = previous.date;
+                toDate = current.date;
             }
         }
 
-        return result;
+        return new Object[]{
+                bestChange,
+                fromDate,
+                toDate
+        };
     }
 
 

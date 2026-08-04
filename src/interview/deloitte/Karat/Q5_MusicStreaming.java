@@ -96,24 +96,35 @@ class MusicPlatform {
     Map<Integer, Song> songs = new HashMap<>();
     Map<Integer, List<PlayEvent>> playMap = new HashMap<>();
 
-    public List<String> getTopListeners(int n){
+    public List<String> getTopListeners(int n) {
 
-        Map<String,Integer> totalTime= new HashMap<>();
-        for(List<PlayEvent> p: playMap.values()){
-            for(PlayEvent p1:p){
-                totalTime.put(p1.userId,totalTime.getOrDefault(p1.userId,0)+p1.durationSec);
+        // Calculate total listening time for each user
+        Map<String, Integer> totalListeningTime = new HashMap<>();
+
+        for (List<PlayEvent> events : playMap.values()) {
+            for (PlayEvent event : events) {
+                totalListeningTime.put(
+                        event.userId,
+                        totalListeningTime.getOrDefault(event.userId, 0) + event.durationSec
+                );
             }
         }
-        List<Map.Entry<String, Integer>> listeners =
-                new ArrayList<>(totalTime.entrySet());
 
+        // Convert map entries to a list for sorting
+        List<Map.Entry<String, Integer>> listeners =
+                new ArrayList<>(totalListeningTime.entrySet());
+
+        // Sort by total listening time (descending),
+        // then by user name (ascending)
         listeners.sort((a, b) -> {
-            if (!a.getValue().equals(b.getValue())) {
-                return b.getValue() - a.getValue(); // descending time
+            int cmp = Integer.compare(b.getValue(), a.getValue());
+            if (cmp != 0) {
+                return cmp;
             }
-            return a.getKey().compareTo(b.getKey()); // alphabetical
+            return a.getKey().compareTo(b.getKey());
         });
 
+        // Collect top N listeners
         List<String> result = new ArrayList<>();
 
         for (int i = 0; i < Math.min(n, listeners.size()); i++) {

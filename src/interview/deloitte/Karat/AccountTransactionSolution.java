@@ -41,7 +41,6 @@ testGetAverageTransactionAmountByAccount  test.
 
 import org.junit.Assert;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,8 +65,8 @@ class Transaction {
     int transactionId;
     int accountId;
     TransactionType type;
-    double amount;         //  Always  positive  in  inputs
-    long timestampSec;  //  Unix-style  seconds  (monotonic  for  tests)
+    double amount;          // Always positive
+    long timestampSec;
 
     Transaction(int transactionId, int accountId, TransactionType type, double amount, long timestampSec) {
         this.transactionId = transactionId;
@@ -79,7 +78,7 @@ class Transaction {
 }
 
 class AccountManager {
-    //  Candidate  may  only  modify  this  class.
+
     Map<Integer, Account> accounts = new HashMap<>();
     List<Transaction> transactions = new ArrayList<>();
 
@@ -88,26 +87,47 @@ class AccountManager {
     }
 
     void addTransaction(Transaction tx) {
-//  Assume  input  transactions  always  refer  to  valid  accounts  for  this  question.
+        // Transactions always refer to valid accounts.
         transactions.add(tx);
     }
-
-    //  Returns  the  current  balance  for  the  given  accountId.
+    // Returns the current balance of an account.
     double getBalance(int accountId) {
         double balance = 0.0;
         for (Transaction tx : transactions) {
             if (tx.accountId == accountId) {
-                if (tx.type == TransactionType.CREDIT) {
+                if (tx.type == TransactionType.CREDIT)
                     balance += tx.amount;
-                }
-
-
+                else
+                    balance -= tx.amount;
             }
         }
         return balance;
     }
 
-
+    // Returns average transaction amount for each account.
+    public Map<Integer, Double> getAverageTransactionAmountByAccount() {
+        Map<Integer, Double> totalAmount = new HashMap<>();
+        Map<Integer, Integer> transactionCount = new HashMap<>();
+        for (Transaction tx : transactions) {
+            totalAmount.put(
+                    tx.accountId,
+                    totalAmount.getOrDefault(tx.accountId, 0.0)
+                            + Math.abs(tx.amount)
+            );
+            transactionCount.put(
+                    tx.accountId,
+                    transactionCount.getOrDefault(tx.accountId, 0) + 1
+            );
+        }
+        Map<Integer, Double> result = new HashMap<>();
+        for (Integer accountId : totalAmount.keySet()) {
+            result.put(
+                    accountId,
+                    totalAmount.get(accountId) / transactionCount.get(accountId)
+            );
+        }
+        return result;
+    }
 }
 
 public class AccountTransactionSolution {
@@ -115,16 +135,20 @@ public class AccountTransactionSolution {
     public static void main(String[] args) {
         testGetBalance_basic();
         testGetBalance_multipleAccounts();
-//  testGetAverageTransactionAmountByAccount();
-        System.out.println("All  tests  passed.");
+        testGetAverageTransactionAmountByAccount();
+        System.out.println("All tests passed.");
     }
 
     private static void assertAlmost(double expected, double actual, double eps) {
-        Assert.assertTrue("Expected  " + expected + "  but  got  " + actual, Math.abs(expected - actual) <= eps);
+        Assert.assertTrue(
+                "Expected " + expected + " but got " + actual,
+                Math.abs(expected - actual) <= eps
+        );
     }
 
     public static void testGetBalance_basic() {
-        System.out.println("Running  testGetBalance_basic");
+        System.out.println("Running testGetBalance_basic");
+
         AccountManager mgr = new AccountManager();
         mgr.addAccount(new Account(1, "Alice"));
 
@@ -133,13 +157,15 @@ public class AccountTransactionSolution {
         mgr.addTransaction(new Transaction(103, 1, TransactionType.DEBIT, 20.0, 1020));
         mgr.addTransaction(new Transaction(104, 1, TransactionType.CREDIT, 10.0, 1030));
 
-//  Expected  balance:  100  -  30  -  20  +  10  =  60
+        // 100 - 30 - 20 + 10 = 60
         assertAlmost(60.0, mgr.getBalance(1), 0.0001);
     }
 
     public static void testGetBalance_multipleAccounts() {
-        System.out.println("Running  testGetBalance_multipleAccounts");
+        System.out.println("Running testGetBalance_multipleAccounts");
+
         AccountManager mgr = new AccountManager();
+
         mgr.addAccount(new Account(1, "Alice"));
         mgr.addAccount(new Account(2, "Bob"));
 
@@ -149,39 +175,36 @@ public class AccountTransactionSolution {
         mgr.addTransaction(new Transaction(204, 2, TransactionType.DEBIT, 5.5, 2015));
         mgr.addTransaction(new Transaction(205, 2, TransactionType.DEBIT, 14.5, 2020));
 
-//  Account  1:  50  -  10  =  40
         assertAlmost(40.0, mgr.getBalance(1), 0.0001);
-//  Account  2:  80  -  5.5  -  14.5  =  60
         assertAlmost(60.0, mgr.getBalance(2), 0.0001);
     }
 
     public static void testGetAverageTransactionAmountByAccount() {
-        System.out.println("Running  testGetAverageTransactionAmountByAccount");
+        System.out.println("Running testGetAverageTransactionAmountByAccount");
+
         AccountManager mgr = new AccountManager();
 
         mgr.addAccount(new Account(1, "Alice"));
         mgr.addAccount(new Account(2, "Bob"));
-        mgr.addAccount(new Account(3, "Charlie"));  //  no  transactions
+        mgr.addAccount(new Account(3, "Charlie"));
 
-//  Account  1:  100,  30,  20,  10  =>  avg  =  160/4  =  40
+        // Account 1: 100, 30, 20, 10 -> avg = 40
         mgr.addTransaction(new Transaction(101, 1, TransactionType.CREDIT, 100.0, 1000));
         mgr.addTransaction(new Transaction(102, 1, TransactionType.DEBIT, 30.0, 1010));
         mgr.addTransaction(new Transaction(103, 1, TransactionType.DEBIT, 20.0, 1020));
         mgr.addTransaction(new Transaction(104, 1, TransactionType.CREDIT, 10.0, 1030));
 
-//  Account  2:  80,  5.5,  14.5  =>  avg  =  100/3  =  33.333...
+        // Account 2: 80, 5.5, 14.5 -> avg = 33.3333
         mgr.addTransaction(new Transaction(201, 2, TransactionType.CREDIT, 80.0, 2005));
         mgr.addTransaction(new Transaction(202, 2, TransactionType.DEBIT, 5.5, 2015));
         mgr.addTransaction(new Transaction(203, 2, TransactionType.DEBIT, 14.5, 2020));
 
-/*Map<Integer,  Double>  avg  =  mgr.getAverageTransactionAmountByAccount();
+        Map<Integer, Double> avg = mgr.getAverageTransactionAmountByAccount();
 
-        assertAlmost(40.0,  avg.get(1),  0.0001);
-        assertAlmost(33.3333,  avg.get(2),  0.0001);
+        assertAlmost(40.0, avg.get(1), 0.0001);
+        assertAlmost(33.3333, avg.get(2), 0.0001);
 
-        //Account  3  has  no  transactions  ->  should  not  be  present
-        Assert.assertFalse(avg.containsKey(3));*/
+        // Account 3 has no transactions.
+        Assert.assertFalse(avg.containsKey(3));
     }
 }
-
-
